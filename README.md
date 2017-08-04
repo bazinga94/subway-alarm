@@ -18,4 +18,11 @@ aaaa
 ㄹㅎㄹㅎㄹ홀홀홀호
 
 fgfgfgfg
+<<<<<<< HEAD
 >>>>>>> origin/master
+=======
+
+ㄴㅇㄹㄴㅇㄹ
+>>>>>>> origin/master
+
+일부로 충돌 텟- 이재택
