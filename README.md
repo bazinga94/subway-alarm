@@ -1,30 +1,38 @@
 # subway-alarm
 첫 commit by jongho
 
-이종호
-이재택
-김세중
+유저디폴트 값 저장과 불러오기
+class ViewController: UIViewController {
 
 
-aaaa
-=======
-김세준
 
-지금 다시 수정해봄 - 이재택
+@IBOutlet weak var textfield1: UITextField!
 
-<<<<<<< HEAD
-일부로 충돌 텟 - 이재택
-=======
-ㄹㅎㄹㅎㄹ홀홀홀호
+@IBOutlet weak var textfield2: UITextField!
 
-fgfgfgfg
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
+@IBAction func event1(_ sender: Any) {
+    //텍스트필드 값 얻어서 유저 디폴트에 저장
+    let strValue1 = textfield1.text
+    let strValue2 = textfield2.text
+    //유저 디폴트에 저장
+    let setting = UserDefaults.standard
 
-ㄴㅇㄹㄴㅇㄹ
->>>>>>> origin/master
+    setting.set(strValue1, forKey: "strkey1")
+    setting.set(strValue2, forKey: "strkey2")
+    setting.synchronize()
 
-일부로 충돌 텟- 이재택
+    }
 
-내폰번호 01067713519
+@IBAction func event2(_ sender: Any) {
+    //유저 디폴트에서 값 읽어오기
+
+    let setting = UserDefaults.standard
+
+    let str1 = setting.string(forKey: "strkey1")
+    let str2 = setting.string(forKey: "strkey2")
+    
+    textfield1.text = str1
+
+    textfield2.text = str2
+
+    }
