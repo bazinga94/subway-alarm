@@ -5,7 +5,7 @@
 이재택
 김세중
 
-
+* 유저디폴트 저장 후 받아오는 방법
 class ViewController: UIViewController {
 
     
@@ -40,3 +40,29 @@ class ViewController: UIViewController {
         textfield2.text = str2
         
     }
+    
+    
+    
+* plist 받아오는 방법    
+    class myTableViewController: UITableViewController {
+
+    var data: [String] = []
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let url: URL = Bundle.main.url(forResource: "devices", withExtension: "plist")!
+        
+        let array = NSArray(contentsOf: url)
+        data = array as! [String]
+
