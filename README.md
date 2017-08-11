@@ -66,3 +66,36 @@ class ViewController: UIViewController {
         let array = NSArray(contentsOf: url)
         data = array as! [String]
 
+
+*노티보내는거
+
+let myNoti = NSNotification.Name("Alarm")
+
+
+class ViewController: UIViewController {
+
+    @IBAction func sendNoti(_ sender: Any) {
+        NotificationCenter.default.post(name: myNoti, object: nil, userInfo: ["data" : "Alarm"])
+        
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(forName: myNoti, object: nil, queue: nil) { (noti: Notification) in
+            let userInfo = noti.userInfo
+            print("user Info : \(userInfo)")
+            
+    }
+    
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+
+   override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+}
+
