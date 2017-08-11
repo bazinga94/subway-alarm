@@ -6,25 +6,37 @@
 김세중
 
 
-aaaa
-=======
-김세준
+class ViewController: UIViewController {
 
-지금 다시 수정해봄 - 이재택
+    
+    
+    @IBOutlet weak var textfield1: UITextField!
+    
+    @IBOutlet weak var textfield2: UITextField!
+    
+    @IBAction func event1(_ sender: Any) {
+        //텍스트필드 값 얻어서 유저 디폴트에 저장
+        let strValue1 = textfield1.text
+        let strValue2 = textfield2.text
+        //유저 디폴트에 저장
+        let setting = UserDefaults.standard
+        
+        setting.set(strValue1, forKey: "strkey1")
+        setting.set(strValue2, forKey: "strkey2")
+        setting.synchronize()
 
-<<<<<<< HEAD
-일부로 충돌 텟 - 이재택
-=======
-ㄹㅎㄹㅎㄹ홀홀홀호
+    }
+    
+    @IBAction func event2(_ sender: Any) {
+        //유저 디폴트에서 값 읽어오기
+        
+        let setting = UserDefaults.standard
 
-fgfgfgfg
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
-
-ㄴㅇㄹㄴㅇㄹ
->>>>>>> origin/master
-
-일부로 충돌 텟- 이재택
-
-내폰번호 01067713519
+        let str1 = setting.string(forKey: "strkey1")
+        let str2 = setting.string(forKey: "strkey2")
+        
+        textfield1.text = str1
+        
+        textfield2.text = str2
+        
+    }
