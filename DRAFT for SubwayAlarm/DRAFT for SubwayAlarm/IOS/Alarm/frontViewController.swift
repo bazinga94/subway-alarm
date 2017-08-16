@@ -31,7 +31,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var isTimerRunning = false// this will be used to make sure only one timer is created at a time
 
     
-    @IBAction func startButtonTapped(_ sender: UIButton) {
+   
+    @IBAction func startButtonTapped(_ sender: AnyObject) {
         if isTimerRunning == false {
             runTimer()
             self.startButton.isEnabled = false
@@ -58,9 +59,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTimer() {
         if seconds < 1 {
             timer.invalidate() // time's up
-            
+        
         }else {
-            
+        
             seconds -= 1 // this will decrement the seconds.
             timerLabel.text = timeString(time: TimeInterval(seconds)) //this will update the label
         }
