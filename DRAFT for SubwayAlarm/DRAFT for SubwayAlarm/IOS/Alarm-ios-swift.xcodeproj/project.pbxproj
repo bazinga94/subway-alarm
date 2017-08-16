@@ -18,7 +18,6 @@
 		8D2CE7E21F418A0D00A554BD /* firstMediaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CE7E11F418A0D00A554BD /* firstMediaTableViewController.swift */; };
 		8DCBD9481F417509003C0B44 /* frontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCBD9471F417509003C0B44 /* frontViewController.swift */; };
 		8DCBD94B1F418801003C0B44 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCBD9491F418801003C0B44 /* Main.storyboard */; };
-		9DB62C3B1F442B6A00ABC5B1 /* 그룹홈.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DB62C3A1F442B6A00ABC5B1 /* 그룹홈.png */; };
 		9DCB85BD1F419D2A00A35BA1 /* 450px-Seoul_Metro_Line_1.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DCB85BC1F419D2A00A35BA1 /* 450px-Seoul_Metro_Line_1.svg.png */; };
 		9E16062C1C62358F009B2407 /* MediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E16062B1C62358F009B2407 /* MediaViewController.swift */; };
 		9E1F30731C49128000C66F79 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1F30721C49128000C66F79 /* Scheduler.swift */; };
@@ -57,7 +56,6 @@
 		8D2CE7E11F418A0D00A554BD /* firstMediaTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = firstMediaTableViewController.swift; sourceTree = "<group>"; };
 		8DCBD9471F417509003C0B44 /* frontViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = frontViewController.swift; sourceTree = "<group>"; };
 		8DCBD94A1F418801003C0B44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9DB62C3A1F442B6A00ABC5B1 /* 그룹홈.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "그룹홈.png"; sourceTree = "<group>"; };
 		9DCB85BC1F419D2A00A35BA1 /* 450px-Seoul_Metro_Line_1.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "450px-Seoul_Metro_Line_1.svg.png"; sourceTree = "<group>"; };
 		9E16062B1C62358F009B2407 /* MediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
 		9E1F30721C49128000C66F79 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 			children = (
 				9DCB85BC1F419D2A00A35BA1 /* 450px-Seoul_Metro_Line_1.svg.png */,
 				8DCBD9491F418801003C0B44 /* Main.storyboard */,
-				9DB62C3A1F442B6A00ABC5B1 /* 그룹홈.png */,
 				8D2CE7E11F418A0D00A554BD /* firstMediaTableViewController.swift */,
 				8DCBD9471F417509003C0B44 /* frontViewController.swift */,
 				9EED787A1AA0F03F00961BC2 /* LaunchScreen.xib */,
@@ -316,7 +313,6 @@
 				9E3B062F1BB8347000453456 /* bell.mp3 in Resources */,
 				9EED787C1AA0F03F00961BC2 /* LaunchScreen.xib in Resources */,
 				9EED78791AA0F03F00961BC2 /* Images.xcassets in Resources */,
-				9DB62C3B1F442B6A00ABC5B1 /* 그룹홈.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
