@@ -27,14 +27,13 @@ var arriveNum: String = "디폴트2"  // 시간을 계산하기 위해 받아와
 class frontViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource{
     
     
-<<<<<<< Updated upstream
+
     var mediaLabel: String!
     var mediaID: String!
     
-    @IBOutlet weak var image1: UIImageView!
-=======
+
     @IBOutlet weak var image1: UIImageView!  //호선 사진 보여주는 label
->>>>>>> Stashed changes
+
     
     @IBOutlet weak var timerLabel: UILabel!
 
@@ -86,8 +85,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.startButton.isEnabled = false
         }
         print(numLbl.text!) //
-        getCodeByName_depart(line: "6")
-        getCodeByName_arrive(line: "6")
+        getCodeByName_depart(line: numLbl.text!)
+        getCodeByName_arrive(line: numLbl.text!)
         
         NotificationCenter.default.addObserver(forName: Depart_Code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
@@ -124,7 +123,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let diffsec = resultDate2!.timeIntervalSince(resultDate1!)
             print("시간 차이는?? : \(abs(diffsec)) 초")
-            //self.seconds = abs(Int(diffsec))   에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
+            self.seconds = abs(Int(diffsec))   //에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
             
             //--------------------------------푸시알림 함수----------------------------------------
             let content = UNMutableNotificationContent()
@@ -166,8 +165,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func unwindFromFirstMediaView(_ segue: UIStoryboardSegue) {
         let src = segue.source as! firstMediaTableViewController
-        //        segueInfo.mediaLabel = src.mediaLabel
-        //        segueInfo.mediaID = src.mediaID
+                segueInfo.mediaLabel = src.mediaLabel
+                segueInfo.mediaID = src.mediaID
     }
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 0.9, target: self, selector: (#selector(frontViewController.updateTimer)), userInfo: nil, repeats: true)
@@ -531,12 +530,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     //-------------------------------API를 받아오는 함수들------------------------------------
     
-    func getCodeByName_depart(line: String) {
-        
-<<<<<<< Updated upstream
-        snoozeEnabled = sender.isOn
-    }
     
+        
+
    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
@@ -571,16 +567,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     
-    @IBAction func unwindFromFirstMediaView(_ segue: UIStoryboardSegue) {
-        let src = segue.source as! firstMediaTableViewController
-     
-            segueInfo.mediaLabel = src.mediaLabel
-       
-        
-            segueInfo.mediaID = src.mediaID
-        
-    }
-=======
+   
+
+    func getCodeByName_depart(line: String) {
         
         var findNum :String? = "" //찾아야하는 FR_CODE
         
@@ -653,7 +642,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }  //getCodeByName_depart 함수 끝
     
->>>>>>> Stashed changes
+
     
     func getCodeByName_arrive(line: String) {
         
