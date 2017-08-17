@@ -67,6 +67,7 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
             //let indexselect = pickerView.selectedRow(inComponent: 0)
             return lineText[indexselect][row]
             
+            
         }
         else{
             // let indexselect = pickerView.selectedRow(inComponent: 0)
@@ -92,15 +93,15 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
             pickerView.reloadComponent(1)
             pickerView.reloadComponent(2)
             
-            var one = UIImage(named: "1.png" )
-            var two = UIImage(named: "2.png" )
-            var three = UIImage(named: "3.png" )
-            var four = UIImage(named: "4.png" )
-            var five = UIImage(named: "5.png" )
-            var six = UIImage(named: "6.png" )
-            var seven = UIImage(named: "7.png" )
-            var eight = UIImage(named: "8.png" )
-            var nine = UIImage(named: "9.png" )
+            let one = UIImage(named: "1.png" )
+            let two = UIImage(named: "2.png" )
+            let three = UIImage(named: "3.png" )
+            let four = UIImage(named: "4.png" )
+            let five = UIImage(named: "5.png" )
+            let six = UIImage(named: "6.png" )
+            let seven = UIImage(named: "7.png" )
+            let eight = UIImage(named: "8.png" )
+            let nine = UIImage(named: "9.png" )
             
             
             var item1 = lineNumber[row]
