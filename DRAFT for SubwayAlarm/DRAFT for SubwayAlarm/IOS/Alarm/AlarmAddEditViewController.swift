@@ -202,17 +202,14 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
     //에딧창에서의 레이블 받아오는 기능
         let strDepart = departLbl.text
         let strArrive = arriveLbl.text
-        
-        let setting = UserDefaults.standard
-        
-        setting.set(strDepart, forKey: "depart")
-        setting.set(strArrive, forKey: "arrive")
-        setting.synchronize()
+
         
         
         let index = segueInfo.curCellIndex
         var tempAlarm = Alarm()
         //tempAlarm.date = date
+        tempAlarm.depart = strDepart!
+        tempAlarm.arrive = strArrive!
         tempAlarm.label = segueInfo.label
         tempAlarm.enabled = true
         tempAlarm.mediaLabel = segueInfo.mediaLabel
@@ -253,31 +250,29 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        var cell = tableView.dequeueReusableCell(withIdentifier: Id.settingIdentifier)
-        if(cell == nil) {
-        cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: Id.settingIdentifier)
-        }
+        var cell = tableView.dequeueReusableCell(withIdentifier: Id.settingIdentifier, for: indexPath)
+
         if indexPath.section == 0 {
             
             if indexPath.row == 0 {
                 
-                cell!.textLabel!.text = "Repeat"
-                cell!.detailTextLabel!.text = WeekdaysViewController.repeatText(weekdays: segueInfo.repeatWeekdays)
-                cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell.textLabel!.text = "Repeat"
+                cell.detailTextLabel!.text = WeekdaysViewController.repeatText(weekdays: segueInfo.repeatWeekdays)
+                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             }
             else if indexPath.row == 1 {
-                cell!.textLabel!.text = "Label"
-                cell!.detailTextLabel!.text = segueInfo.label
-                cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell.textLabel!.text = "Label"
+                cell.detailTextLabel!.text = segueInfo.label
+                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             }
             else if indexPath.row == 2 {
-                cell!.textLabel!.text = "Sound"
-                cell!.detailTextLabel!.text = segueInfo.mediaLabel
-                cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell.textLabel!.text = "Sound"
+                cell.detailTextLabel!.text = segueInfo.mediaLabel
+                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             }
             else if indexPath.row == 3 {
                
-                cell!.textLabel!.text = "Snooze"
+                cell.textLabel!.text = "Snooze"
                 let sw = UISwitch(frame: CGRect())
                 sw.addTarget(self, action: #selector(AlarmAddEditViewController.snoozeSwitchTapped(_:)), for: UIControlEvents.touchUpInside)
                 
@@ -285,18 +280,18 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
                    sw.setOn(true, animated: false)
                 }
                 
-                cell!.accessoryView = sw
+                cell.accessoryView = sw
             }
         }
         else if indexPath.section == 1 {
             cell = UITableViewCell(
                 style: UITableViewCellStyle.default, reuseIdentifier: Id.settingIdentifier)
-            cell!.textLabel!.text = "Delete Alarm"
-            cell!.textLabel!.textAlignment = .center
-            cell!.textLabel!.textColor = UIColor.red
+            cell.textLabel!.text = "Delete Alarm"
+            cell.textLabel!.textAlignment = .center
+            cell.textLabel!.textColor = UIColor.red
         }
         
-        return cell!
+        return cell
     }
     
     

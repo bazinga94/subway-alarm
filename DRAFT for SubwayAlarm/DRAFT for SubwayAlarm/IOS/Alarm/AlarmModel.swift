@@ -20,6 +20,8 @@ struct Alarm: PropertyReflectable {
     var mediaLabel: String = "bell"
     var label: String = "Alarm"
     var onSnooze: Bool = false
+    var depart = ""
+    var arrive = ""
     
     init(){}
     
@@ -45,23 +47,16 @@ struct Alarm: PropertyReflectable {
         mediaLabel = dict["mediaLabel"] as! String
         label = dict["label"] as! String
         onSnooze = dict["onSnooze"] as! Bool
+        arrive = dict["arrive"] as! String
+        depart = dict["depart"] as! String
     }
     
-    static var propertyCount: Int = 9
+    static var propertyCount: Int = 11
 }
 
 extension Alarm {
     var formattedTime: String {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "h:mm a"
-       // return dateFormatter.string(from: self.date)
-        let setting = UserDefaults.standard
-        
-        let addDepart = setting.string(forKey: "depart")
-        let addArrive = setting.string(forKey: "arrive")
-        
-        
-        return "\(addDepart) -> \(addArrive)!"
+        return "\(depart) -> \(arrive)!"
     }
 }
 
