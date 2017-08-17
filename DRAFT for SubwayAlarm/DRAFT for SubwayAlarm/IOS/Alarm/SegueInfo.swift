@@ -9,12 +9,12 @@
 import Foundation
 
 struct SegueInfo {
-    var curCellIndex: Int
+    var curCellIndex: Int //
     var isEditMode: Bool
     var label: String
-    var mediaLabel: String
+    var mediaLabel: String //
     var mediaID: String
-    var repeatWeekdays: [Int]
+    var repeatWeekdays: [Int] //필요 ㄴ
     var enabled: Bool
     var snoozeEnabled: Bool
 }

@@ -21,7 +21,7 @@ class firstMediaTableViewController: UITableViewController, MPMediaPickerControl
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        performSegue(withIdentifier: Id.firstSoundUnwindIdentifier, sender: self)
+        performSegue(withIdentifier: "firstSoundUnwindSegue", sender: self)
     }
     
     override func didReceiveMemoryWarning() {
@@ -131,6 +131,7 @@ class firstMediaTableViewController: UITableViewController, MPMediaPickerControl
         else if indexPath.section == 3 {
             let cell = tableView.cellForRow(at: indexPath)
             cell?.accessoryType = UITableViewCellAccessoryType.checkmark
+           
             mediaLabel = cell?.textLabel?.text!
             cell?.setSelected(true, animated: true)
             cell?.setSelected(false, animated: true)
