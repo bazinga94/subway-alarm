@@ -198,7 +198,16 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBAction func saveEditAlarm(_ sender: AnyObject) {
         //let date = Scheduler.correctSecondComponent(date: pickerView.date)
-    
+    //에딧창에서의 레이블 받아오는 기능
+        let strDepart = departLbl.text
+        let strArrive = arriveLbl.text
+        
+        let setting = UserDefaults.standard
+        
+        setting.set(strDepart, forKey: "depart")
+        setting.set(strArrive, forKey: "arrive")
+        setting.synchronize()
+        
         
         let index = segueInfo.curCellIndex
         var tempAlarm = Alarm()

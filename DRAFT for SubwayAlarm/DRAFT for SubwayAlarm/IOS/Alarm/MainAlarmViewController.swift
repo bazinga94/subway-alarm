@@ -82,6 +82,7 @@ class MainAlarmViewController: UITableViewController{
             performSegue(withIdentifier: Id.editSegueIdentifier, sender: SegueInfo(curCellIndex: indexPath.row, isEditMode: true, label: alarmModel.alarms[indexPath.row].label, mediaLabel: alarmModel.alarms[indexPath.row].mediaLabel, mediaID: alarmModel.alarms[indexPath.row].mediaID, repeatWeekdays: alarmModel.alarms[indexPath.row].repeatWeekdays, enabled: alarmModel.alarms[indexPath.row].enabled, snoozeEnabled: alarmModel.alarms[indexPath.row].snoozeEnabled))
         }
     }
+//    var favoriteArray : Array<NSMutableAttributedString> = Array<NSMutableAttributedString>()
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: Id.alarmCellIdentifier)
@@ -94,8 +95,16 @@ class MainAlarmViewController: UITableViewController{
         let alarm: Alarm = alarmModel.alarms[indexPath.row]
         let amAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 20.0)]
         let str = NSMutableAttributedString(string: alarm.formattedTime, attributes: amAttr)
-        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 45.0)]
+        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 15.0)]
         str.addAttributes(timeAttr, range: NSMakeRange(0, str.length-2))
+        
+        
+//        favoriteArray.append(str)
+//        print(favoriteArray[indexPath.row])
+//        
+//        let station_name = favoriteArray[indexPath.row]
+//        cell!.textLabel?.attributedText = station_name
+        
         cell!.textLabel?.attributedText = str
         cell!.detailTextLabel?.text = alarm.label
         //append switch button

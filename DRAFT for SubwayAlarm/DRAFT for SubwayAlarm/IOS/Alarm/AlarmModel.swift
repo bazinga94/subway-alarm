@@ -52,9 +52,16 @@ struct Alarm: PropertyReflectable {
 
 extension Alarm {
     var formattedTime: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "h:mm a"
-        return dateFormatter.string(from: self.date)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "h:mm a"
+       // return dateFormatter.string(from: self.date)
+        let setting = UserDefaults.standard
+        
+        let addDepart = setting.string(forKey: "depart")
+        let addArrive = setting.string(forKey: "arrive")
+        
+        
+        return "\(addDepart) -> \(addArrive)!"
     }
 }
 
