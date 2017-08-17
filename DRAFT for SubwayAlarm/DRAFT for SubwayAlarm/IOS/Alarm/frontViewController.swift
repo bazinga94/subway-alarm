@@ -13,8 +13,8 @@ import MediaPlayer
 class frontViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource{
     
     
-    
-    
+    var mediaLabel: String!
+    var mediaID: String!
     
     @IBOutlet weak var image1: UIImageView!
     
@@ -263,7 +263,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         alarmModel=Alarms()
         subwaytableView.reloadData()
-        
+        snoozeEnabled = segueInfo.snoozeEnabled
         
         var one = UIImage(named: "1.png" )
         image1.image = one
@@ -282,6 +282,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             numLbl.text = "1"
             startLbl.text = "신설동역"
             endLbl.text = "신설동역"
+        
+            segueInfo = SegueInfo(curCellIndex: 0, isEditMode: false, label: "Alarm", mediaLabel: "bell", mediaID: "", repeatWeekdays: [], enabled: false, snoozeEnabled: false)
             
         }
         
@@ -293,22 +295,61 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
 
     
+    
+//tableview 관련
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if section == 0 {
-        return 2
-    }
-        else {
             return 2
-        }
+        
     }
     
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        
+//        let cell = subwaytableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
+//        
+//        if indexPath.section == 0 {
+//            
+//            
+//            
+//            
+//            if indexPath.row == 0 {
+//                cell.textLabel!.text = "Sound"
+//                if mediaLabel != nil {
+//                    cell.detailTextLabel!.text = segueInfo.mediaLabel
+//                    
+//                }
+//                else {
+//                    cell.detailTextLabel!.text = "bell"}
+//                
+//                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator }
+//                
+//                
+//            else if indexPath.row == 1 {
+//                cell.textLabel!.text = "Snooze"
+//                cell.detailTextLabel!.text = ""
+//                
+//                let sw = UISwitch(frame: CGRect())
+//                sw.addTarget(self, action:
+//                    #selector(frontViewController.snoozeSwitchTapped(_:)), for: UIControlEvents.touchUpInside)
+//                
+//                
+//                if snoozeEnabled {
+//                    sw.setOn(true, animated: false)
+//                    
+//                }
+//                
+//                cell.accessoryView = sw
+//            }
+//        }
+//        return cell
+//    }
+//    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
+
+
         var cell = subwaytableView.dequeueReusableCell(withIdentifier: Id.settingIdentifier)
-        
+
         if(cell == nil) {
             
             cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: Id.settingIdentifier)
@@ -323,7 +364,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
             if indexPath.row == 0 {
                 cell!.textLabel!.text = "Sound"
-                
+                cell!.detailTextLabel!.text = segueInfo.mediaLabel
                 cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator }
                 
                 
@@ -362,7 +403,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRow(at: indexPath)
+        let cell = subwaytableView.cellForRow(at: indexPath)
         
         if indexPath.section == 0 {
             
@@ -392,11 +433,47 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == Id.saveSegueIdentifier {
+            let dist = segue.destination as! MainAlarmViewController
+            let cells = dist.tableView.visibleCells
+            for cell in cells {
+                let sw = cell.accessoryView as! UISwitch
+                if sw.tag > segueInfo.curCellIndex
+                {
+                    sw.tag -= 1
+                }
+            }
+            alarmScheduler.reSchedule()
+        }
+        else if segue.identifier == Id.soundSegueIdentifier {
+            //TODO
+            let dist = segue.destination as! firstMediaTableViewController
+            dist.mediaID = segueInfo.mediaID
+            dist.mediaLabel = segueInfo.mediaLabel
+        }
+        else if segue.identifier == Id.labelSegueIdentifier {
+            let dist = segue.destination as! LabelEditViewController
+            dist.label = segueInfo.label
+        }
+        else if segue.identifier == Id.weekdaysSegueIdentifier {
+            let dist = segue.destination as! WeekdaysViewController
+            dist.weekdays = segueInfo.repeatWeekdays
+        }
+    }
+
+    
     
     @IBAction func unwindFromFirstMediaView(_ segue: UIStoryboardSegue) {
         let src = segue.source as! firstMediaTableViewController
-//        segueInfo.mediaLabel = src.mediaLabel
-//        segueInfo.mediaID = src.mediaID
+     
+            segueInfo.mediaLabel = src.mediaLabel
+       
+        
+            segueInfo.mediaID = src.mediaID
+        
     }
     
     
