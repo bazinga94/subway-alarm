@@ -135,7 +135,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: abs(diffsec), repeats: false)
             
-            let request = UNNotificationRequest(identifier: "timerdone", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: "timerdone", content: content, trigger: trigger) //notification ID 는 "timerdone"
             
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil )
         }
@@ -144,6 +144,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.present(alertController, animated: true) {
             // ...
         }
+        
+        
+        
         
         
     }
@@ -156,6 +159,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         isTimerRunning = false
         startButton.isEnabled = true
         //pauseButton.isEnabled = false
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
     }
     @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
         
@@ -350,6 +355,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
+            UNUserNotificationCenter.current().delegate = self //foreground에서 푸시알림이 뜰수 있게 하는 함수
+        
             let one = UIImage(named: "1.png" )
             image1.image = one
         
