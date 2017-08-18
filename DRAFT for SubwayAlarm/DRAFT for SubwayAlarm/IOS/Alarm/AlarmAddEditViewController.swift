@@ -202,6 +202,7 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
     //에딧창에서의 레이블 받아오는 기능
         let strDepart = departLbl.text
         let strArrive = arriveLbl.text
+        let strLine = lineLbl.text
 
         
         
@@ -210,6 +211,7 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
         //tempAlarm.date = date
         tempAlarm.depart = strDepart!
         tempAlarm.arrive = strArrive!
+        tempAlarm.line = strLine!
         tempAlarm.label = segueInfo.label
         tempAlarm.enabled = true
         tempAlarm.mediaLabel = segueInfo.mediaLabel
