@@ -22,6 +22,8 @@ struct Alarm: PropertyReflectable {
     var onSnooze: Bool = false
     var depart = ""
     var arrive = ""
+    var line = ""
+    
     
     init(){}
     
@@ -49,14 +51,18 @@ struct Alarm: PropertyReflectable {
         onSnooze = dict["onSnooze"] as! Bool
         arrive = dict["arrive"] as! String
         depart = dict["depart"] as! String
+        line = dict["line"] as! String
     }
     
-    static var propertyCount: Int = 11
+    static var propertyCount: Int = 12
 }
 
 extension Alarm {
     var formattedTime: String {
         return "\(depart) -> \(arrive)!"
+    }
+    var formattedLine: String {
+        return "\(line)!"
     }
 }
 

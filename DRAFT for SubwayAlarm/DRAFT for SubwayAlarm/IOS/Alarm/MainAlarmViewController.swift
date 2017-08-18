@@ -105,8 +105,67 @@ class MainAlarmViewController: UITableViewController{
 //        let station_name = favoriteArray[indexPath.row]
 //        cell!.textLabel?.attributedText = station_name
         
+        
+        //셀에 이미지 뷰 넣기
+//       let imageView = UIImageView(frame: CGRect())
+//        imageView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+//        
+//       
+//        let imgnum = NSMutableAttributedString(string: alarm.formattedLine)
+//        
+//        let one = UIImage(named: "1.png" )
+//        let two = UIImage(named: "2.png" )
+//        let three = UIImage(named: "3.png" )
+//        let four = UIImage(named: "4.png" )
+//        let five = UIImage(named: "5.png" )
+//        let six = UIImage(named: "6.png" )
+//        let seven = UIImage(named: "7.png" )
+//        let eight = UIImage(named: "8.png" )
+//        let nine = UIImage(named: "9.png" )
+//    
+//        switch(imgnum){
+//            
+//        case 1:
+//            imageView.image = one
+//            
+//        case 2:
+//            imageView.image = two
+//            
+//        case 3:
+//            imageView.image = three
+//            
+//        case 4:
+//            imageView.image = four
+//            
+//        case 5:
+//            imageView.image = five
+//            
+//        case 6:
+//            imageView.image = six
+//            
+//        case 7:
+//            imageView.image = seven
+//            
+//        case 8:
+//            imageView.image = eight
+//            
+//        case 9:
+//            imageView.image = nine
+//            
+//        default:
+//            return
+//        }
+//
+//        
+//        cell!.imageView?.image = imgnum
+//        
+        //셀에 string 넣기
         cell!.textLabel?.attributedText = str
         cell!.detailTextLabel?.text = alarm.label
+        
+        
+        
+        
         //append switch button
         let sw = UISwitch(frame: CGRect())
         sw.transform = CGAffineTransform(scaleX: 0.9, y: 0.9);
