@@ -336,8 +336,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         subwaytableView.reloadData()
         snoozeEnabled = segueInfo.snoozeEnabled
         
-        var one = UIImage(named: "1.png" )
-        image1.image = one
+//        var one = UIImage(named: "1.png" )
+//        image1.image = one
         
         super.viewWillAppear(animated)
     }
@@ -350,7 +350,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
-
+            let one = UIImage(named: "1.png" )
+            image1.image = one
         
             subwayPicker.delegate = self
             subwayPicker.dataSource = self
