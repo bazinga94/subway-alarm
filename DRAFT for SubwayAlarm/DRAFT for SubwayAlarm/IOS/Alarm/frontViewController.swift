@@ -81,7 +81,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
    
     @IBAction func startButtonTapped(_ sender: AnyObject) {  //start버튼을 누를때 실행 함수
         if isTimerRunning == false {
-            runTimer()
+            
             self.startButton.isEnabled = false
         }
         print(numLbl.text!) //
@@ -121,9 +121,10 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let resultDate2 = dateFormatter.date(from: time2)
             
             
-            let diffsec = resultDate2!.timeIntervalSince(resultDate1!)
+            let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!)
             print("시간 차이는?? : \(abs(diffsec)) 초")
-            self.seconds = abs(Int(diffsec))   //에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
+            self.seconds = abs(Int(diffsec))
+            self.runTimer()//에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
             
             //--------------------------------푸시알림 함수----------------------------------------
             let content = UNMutableNotificationContent()
@@ -143,13 +144,13 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.present(alertController, animated: true) {
             // ...
         }
-
+        
         
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
         timer.invalidate()
-        seconds = 60 // 기본 타이머는 60초 -> 시간차이변수로 바꿔주자!
+        seconds = 0     // 기본 타이머는 60초 -> 시간차이변수로 바꿔주자!
         
         timerLabel.text = timeString(time: TimeInterval(seconds))
         isTimerRunning = false
