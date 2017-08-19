@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/yutao.long/github/Alarm-ios-swift/IOS/Alarm-ios-swift.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

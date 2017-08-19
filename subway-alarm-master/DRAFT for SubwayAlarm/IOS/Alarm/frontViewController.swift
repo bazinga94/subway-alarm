@@ -357,16 +357,10 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
-<<<<<<< HEAD:subway-alarm-master/DRAFT for SubwayAlarm/IOS/Alarm/frontViewController.swift
-        
-        
-            UNUserNotificationCenter.current().delegate = self
-        
-=======
+
 
             UNUserNotificationCenter.current().delegate = self //foreground에서 푸시알림이 뜰수 있게 하는 함수
 
->>>>>>> origin/master:DRAFT for SubwayAlarm/DRAFT for SubwayAlarm/IOS/Alarm/frontViewController.swift
         
             let one = UIImage(named: "1.png" )
             image1.image = one
