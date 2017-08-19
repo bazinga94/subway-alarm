@@ -54,7 +54,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var alarmScheduler: AlarmSchedulerDelegate = Scheduler()
     var alarmModel: Alarms = Alarms()
     var segueInfo: SegueInfo!
-    var snoozeEnabled: Bool = false
+    //var snoozeEnabled: Bool = false
     var enabled: Bool!
     
     var resumeTapped = false
@@ -185,10 +185,10 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 알람을 멈춤....
         
     }
-    @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
-        
-        snoozeEnabled = sender.isOn
-    }
+//    @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
+//        
+//        snoozeEnabled = sender.isOn
+//    }
     
     @IBAction func unwindFromFirstMediaView(_ segue: UIStoryboardSegue) {
         let src = segue.source as! firstMediaTableViewController
@@ -396,7 +396,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         alarmModel=Alarms()
         subwaytableView.reloadData()
-        snoozeEnabled = segueInfo.snoozeEnabled
+        //snoozeEnabled = segueInfo.snoozeEnabled
         
 //        var one = UIImage(named: "1.png" )
 //        image1.image = one
@@ -477,51 +477,10 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //tableview 관련
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-            return 2
+            return 1
         
     }
     
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        
-//        let cell = subwaytableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
-//        
-//        if indexPath.section == 0 {
-//            
-//            
-//            
-//            
-//            if indexPath.row == 0 {
-//                cell.textLabel!.text = "Sound"
-//                if mediaLabel != nil {
-//                    cell.detailTextLabel!.text = segueInfo.mediaLabel
-//                    
-//                }
-//                else {
-//                    cell.detailTextLabel!.text = "bell"}
-//                
-//                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator }
-//                
-//                
-//            else if indexPath.row == 1 {
-//                cell.textLabel!.text = "Snooze"
-//                cell.detailTextLabel!.text = ""
-//                
-//                let sw = UISwitch(frame: CGRect())
-//                sw.addTarget(self, action:
-//                    #selector(frontViewController.snoozeSwitchTapped(_:)), for: UIControlEvents.touchUpInside)
-//                
-//                
-//                if snoozeEnabled {
-//                    sw.setOn(true, animated: false)
-//                    
-//                }
-//                
-//                cell.accessoryView = sw
-//            }
-//        }
-//        return cell
-//    }
-//    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -537,44 +496,11 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if indexPath.section == 0 {
             
-            
-                
-                
             if indexPath.row == 0 {
                 cell!.textLabel!.text = "Sound"
                 cell!.detailTextLabel!.text = segueInfo.mediaLabel
                 cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator }
-                
-                
-            else if indexPath.row == 1 {
-                cell!.textLabel!.text = "Snooze"
-                
-                
-                let sw = UISwitch(frame: CGRect())
-                sw.addTarget(self, action:
-                    #selector(AlarmAddEditViewController.snoozeSwitchTapped(_:)), for: UIControlEvents.touchUpInside)
-                
-                
-                if snoozeEnabled {
-                    sw.setOn(true, animated: false)
-                    
-                }
-                
-                cell!.accessoryView = sw
-            }
         }
-            
-        else if indexPath.section == 1 {
-            
-            cell = UITableViewCell(
-                style: UITableViewCellStyle.default, reuseIdentifier:
-                Id.settingIdentifier)
-            
-            cell!.textLabel!.text = "Delete Alarm"
-            cell!.textLabel!.textAlignment = .center
-            cell!.textLabel!.textColor = UIColor.red
-        }
-        
         return cell!
     }
     
