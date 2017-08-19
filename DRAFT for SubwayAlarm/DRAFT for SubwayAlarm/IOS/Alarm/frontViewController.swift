@@ -25,9 +25,9 @@ var time2: String = " "
 var departNum: String = "디폴트"
 var arriveNum: String = "디폴트2"  // 시간을 계산하기 위해 받아와야하는 역 이름 변수들 + 디폴트 값을 안 만들었더니 에러가 생겨서...
 
-class frontViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource{
+class frontViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, AVAudioPlayerDelegate{
     
-    
+    var audioPlayer: AVAudioPlayer? //알람때문에
 
     var mediaLabel: String!
     var mediaID: String!
@@ -61,13 +61,15 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var seconds = 60 // this variable will hold a starting value of seconds. it could be any amount above 0
     
-    var timer = Timer()
+    var soundTimer: Timer = Timer() //소리 알람을 위해
+    
+    var timer: Timer = Timer() //숫자 타이머를 위해
     var isTimerRunning = false// this will be used to make sure only one timer is created at a time
     
     let lineNumber:[String] = ["1","2","3","4","5","6","7","8","9"]
     
     let lineText: [[String]] = [
-        ["신설동", "동묘앞", "동대문", "종로5가"],
+        ["신설동", "동묘앞", "동대문", "종로5가", "종각", "시청", "서울역"],
         ["시청", "을지로입구", "을지로3가", "을지로4가", "동대문역사문화공원", "신당", "상왕십리", "왕십리"],
         ["대화", "주엽", "정발산", "마두", "백석", "대곡", "화정", "원당", "삼송", "지축"],
         ["당고개", "상계", "노원", "창동", "쌍문", "수유"],
@@ -77,14 +79,14 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         ["암사", "천호", "강동구청", "몽촌토성", "잠실", "석촌", "송파", "가락시장"],
         ["개화", "김포공항", "공항시장", "신방화", "양천향", "가양", "중미"]
     ]
-
-    
    
     @IBAction func startButtonTapped(_ sender: AnyObject) {  //start버튼을 누를때 실행 함수
         if isTimerRunning == false {
             
             self.startButton.isEnabled = false
         }
+        
+        
         print(numLbl.text!) //
         getCodeByName_depart(line: numLbl.text!)
         //getCodeByName_arrive(line: numLbl.text!) //역 코드를 찾는 함수 실행!!
@@ -108,25 +110,36 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         //---------------------------------alert 생성 함수------------------------
-        let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "출발: \(startLbl.text) 도착: \(endLbl.text)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
             print(action)
+            
         }
         alertController.addAction(cancelAction)
         
         let destroyAction = UIAlertAction(title: "Start", style: .destructive) { action in
             //Start 버튼을 눌렀을때 실행 하는 시간 계산 함수
             print(action)
+            
             dateFormatter.dateFormat = "HH:mm:ss"
             let resultDate1 = dateFormatter.date(from: time1)
             let resultDate2 = dateFormatter.date(from: time2)
             
             
-            let diffsec: Double = resultDate2!.timeIntervalSince(resultDate1!)
+            let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!) - 60 // 60초를 빼주는 이유는 여유있게 알람이 울리도록 하기위해
             print("시간 차이는?? : \(abs(diffsec)) 초")
             self.seconds = abs(Int(diffsec))
-            self.runTimer()//에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
+            self.runTimer()//에러가 발생한다????
+            self.soundTimer = Timer.scheduledTimer(withTimeInterval: abs(diffsec),
+                                                   repeats: false) {
+                                                    timer in
+                                                    let bell: String = "bell"
+                                                    self.playSound(bell) //알람을 울리게 하는 함수 "bell.mp3"
+                                                    //Put the code that be called by the timer here.
+                                                    print("알람 발생!")
+            }
+            
             
             //--------------------------------푸시알림 함수----------------------------------------
             let content = UNMutableNotificationContent()
@@ -154,7 +167,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
-        timer.invalidate()
+        timer.invalidate()  //숫자 타이머 정지
+        soundTimer.invalidate()  //소리 나는 알람 취소/정지 해주는 함수
         seconds = 0     // 기본 타이머는 60초 -> 시간차이변수로 바꿔주자!
         
         timerLabel.text = timeString(time: TimeInterval(seconds))
@@ -163,21 +177,59 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //pauseButton.isEnabled = false
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
+        
+        
+        self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 알람을 멈춤....
+        
     }
     @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
         
         snoozeEnabled = sender.isOn
     }
     
-    
-    
     @IBAction func unwindFromFirstMediaView(_ segue: UIStoryboardSegue) {
         let src = segue.source as! firstMediaTableViewController
                 segueInfo.mediaLabel = src.mediaLabel
                 segueInfo.mediaID = src.mediaID
     }
+    
+    func playSound(_ soundName: String) {
+        
+        //vibrate phone first
+        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+        //set vibrate callback
+        AudioServicesAddSystemSoundCompletion(SystemSoundID(kSystemSoundID_Vibrate),nil,
+                                              nil,
+                                              { (_:SystemSoundID, _:UnsafeMutableRawPointer?) -> Void in
+                                                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+        },
+                                              nil)
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: soundName, ofType: "mp3")!)
+        
+        var error: NSError?
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+        } catch let error1 as NSError {
+            error = error1
+            audioPlayer = nil
+        }
+        
+        if let err = error {
+            print("audioPlayer error \(err.localizedDescription)")
+            return
+        } else {
+            audioPlayer!.delegate = self
+            audioPlayer!.prepareToPlay()
+        }
+        
+        //negative number means loop infinity
+        audioPlayer!.numberOfLoops = -1  //audioPlayer!.stop() 명령 전까지 계속 울림...
+        audioPlayer!.play()
+    }
+    
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 0.9, target: self, selector: (#selector(frontViewController.updateTimer)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(frontViewController.updateTimer)), userInfo: nil, repeats: true)
         isTimerRunning = true
         //isTimerRunning = true
         //pauseButton.isEnabled = true
