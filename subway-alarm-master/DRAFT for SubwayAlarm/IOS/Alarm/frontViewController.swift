@@ -84,6 +84,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if isTimerRunning == false {
             
             self.startButton.isEnabled = false
+            resetButton.isEnabled = true
         }
         
         
@@ -175,6 +176,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         isTimerRunning = false
         startButton.isEnabled = true
         //pauseButton.isEnabled = false
+        
+        resetButton.isEnabled = false
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
         
