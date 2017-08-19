@@ -10,10 +10,10 @@ import Foundation
 import MediaPlayer
 import UserNotifications // 로컬 푸시 권한 요청
 
-let Depart_Code = NSNotification.Name("TaskDone")
-let Arrive_Code = NSNotification.Name("TaskDone2")
-let Depart_Sec = NSNotification.Name("TaskDone3")
-let Arrive_Sec = NSNotification.Name("TaskDone4")
+let Start_code = NSNotification.Name("TaskDone")
+let End_code = NSNotification.Name("TaskDone2")
+let Start_sec = NSNotification.Name("TaskDone3")
+let End_sec = NSNotification.Name("TaskDone4")
 
 let dateFormatter = DateFormatter()
 var TRAIN_NO = " "
@@ -37,15 +37,15 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBOutlet weak var timerLabel: UILabel!
-
     @IBOutlet weak var startButton: UIButton!
-    
     @IBOutlet weak var resetButton: UIButton!
    
 
     
     @IBOutlet weak var subwayPicker: UIPickerView!
     @IBOutlet weak var subwaytableView: UITableView!
+    
+    
     @IBOutlet weak var numLbl: UILabel!
     @IBOutlet weak var startLbl: UILabel!
     @IBOutlet weak var endLbl: UILabel!
@@ -87,13 +87,11 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             resetButton.isEnabled = true
         }
         
-        
-        print(numLbl.text!) //
         getCodeByName_depart(line: numLbl.text!)
         //getCodeByName_arrive(line: numLbl.text!) //역 코드를 찾는 함수 실행!!
         
         
-        NotificationCenter.default.addObserver(forName: Depart_Code, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: Start_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 departNum = userInfo["data"] as! String
                 
@@ -102,7 +100,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
-        NotificationCenter.default.addObserver(forName: Arrive_Code, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: End_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 arriveNum = userInfo["data"] as! String
                 
@@ -114,14 +112,14 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let alertController = UIAlertController(title: "출발: \(startLbl.text) 도착: \(endLbl.text)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
-            print(action)
+            
             
         }
         alertController.addAction(cancelAction)
         
         let destroyAction = UIAlertAction(title: "Start", style: .destructive) { action in
             //Start 버튼을 눌렀을때 실행 하는 시간 계산 함수
-            print(action)
+            
             
             dateFormatter.dateFormat = "HH:mm:ss"
             let resultDate1 = dateFormatter.date(from: time1)
@@ -261,7 +259,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     //선택기보기의 열 설정 수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3 }
+        return 3
+    }
     //열에서 항목의 총 갯수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
@@ -361,8 +360,47 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return
             }
 
+            subwayPicker.selectRow(0, inComponent: 1, animated: true)
+            subwayPicker.selectRow(0, inComponent: 2, animated: true)
+            self.subwayPicker.reloadAllComponents()
             
-            
+            if item1 == "1"{
+                startLbl.text = "신설동"
+                endLbl.text = "신설동"
+            }
+            if item1 == "2"{
+                startLbl.text = "시청"
+                endLbl.text = "시청"
+            }
+            if item1 == "3"{
+                startLbl.text = "대화"
+                endLbl.text = "대화"
+            }
+            if item1 == "4"{
+                startLbl.text = "당고개"
+                endLbl.text = "당고개"
+            }
+            if item1 == "5"{
+                startLbl.text = "방화"
+                endLbl.text = "방화"
+            }
+            if item1 == "6"{
+                startLbl.text = "응암"
+                endLbl.text = "응암"
+            }
+            if item1 == "7"{
+                startLbl.text = "장암"
+                endLbl.text = "장암"
+            }
+            if item1 == "8"{
+                startLbl.text = "암사"
+                endLbl.text = "암사"
+            }
+            if item1 == "9"{
+                startLbl.text = "개화"
+                endLbl.text = "개화"
+            }
+
             return numLbl.text = lineNumber[row]
         }
             
@@ -409,6 +447,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
             
             super.viewDidLoad()
+        
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
@@ -424,8 +463,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             subwayPicker.dataSource = self
             
             numLbl.text = "1"
-            startLbl.text = "신설동역"
-            endLbl.text = "신설동역"
+            startLbl.text = "신설동"
+            endLbl.text = "신설동"
         
             segueInfo = SegueInfo(curCellIndex: 0, isEditMode: false, label: "Alarm", mediaLabel: "bell", mediaID: "", repeatWeekdays: [], enabled: false, snoozeEnabled: false)
             
@@ -435,29 +474,28 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         
-        NotificationCenter.default.addObserver(forName: Depart_Code, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: Start_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 출발역 코드: \(userInfo["data"] as! String)")
             }
         }
-        NotificationCenter.default.addObserver(forName: Arrive_Code, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: End_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 도착역 코드: \(userInfo["data"] as! String)")
             }
         }
-        NotificationCenter.default.addObserver(forName: Depart_Sec, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: Start_sec, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 출발역 떠나는 시간: \(userInfo["data"] as! String)")
               
-                print(userInfo["data2"] as! String) //train_num을 받아온다
-                print(userInfo["data"] as! String) //left_time을 받아온다
+                print("TRAIN_NO : ",userInfo["data2"] as! String) //train_num을 받아온다
                 
                 TRAIN_NO = userInfo["data2"] as! String
                 self.getCodeByName_arrive(line: self.numLbl.text!)
                 time1 = userInfo["data"] as! String
             }
         }
-        NotificationCenter.default.addObserver(forName: Arrive_Sec, object: nil, queue: nil) { (noti: Notification) in
+        NotificationCenter.default.addObserver(forName: End_sec, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 도착역 도착 시간: \(userInfo["data"] as! String)")
                 time2 = userInfo["data"] as! String
@@ -529,12 +567,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             performSegue(withIdentifier: Id.saveSegueIdentifier, sender: self)
         }
     }
-    //-------------------------------API를 받아오는 함수들------------------------------------
     
-    
-        
-
-   
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -567,7 +600,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     
-    
+    //-------------------------------API를 받아오는 함수들------------------------------------
    
 
     func getCodeByName_depart(line: String) {
@@ -623,7 +656,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     
                 }
-                NotificationCenter.default.post(name: Depart_Code, object: nil, userInfo:["data":findNum!])
+                NotificationCenter.default.post(name: Start_code, object: nil, userInfo:["data":findNum!])
                 
                 
             } catch {
@@ -701,7 +734,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     
                 }
-                NotificationCenter.default.post(name: Arrive_Code, object: nil, userInfo:["data":findNum!])
+                NotificationCenter.default.post(name: End_code, object: nil, userInfo:["data":findNum!])
                 
                 
             } catch {
@@ -787,7 +820,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 let myDict = [ "data": left_time[0], "data2":train_num[0]] //dictionary 형태로 여러개의 데이터를 보낼수도 있다!!
                 
-                NotificationCenter.default.post(name: Depart_Sec, object: nil, userInfo:myDict) //data2에 TRAIN_NO 정보가 들어간다.
+                NotificationCenter.default.post(name: Start_sec, object: nil, userInfo:myDict) //data2에 TRAIN_NO 정보가 들어간다.
                 
                 
             } catch {
@@ -862,7 +895,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 //let num = 10
                 
-                NotificationCenter.default.post(name: Arrive_Sec, object: nil, userInfo:["data":left_time[0]])
+                NotificationCenter.default.post(name: End_sec, object: nil, userInfo:["data":left_time[0]])
                 //원래는 arrive_time[0]으로 해야 정확하지만.... 상행 하행 고려를 해줘야 한다!!
                 
                 
