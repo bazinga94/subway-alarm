@@ -127,7 +127,7 @@ class MainAlarmViewController: UITableViewController{
 
         //셀에 string 넣기
         cell!.textLabel?.attributedText = str
-        cell!.detailTextLabel?.text = alarm.label
+        cell!.detailTextLabel?.text = ""
         
         
         
