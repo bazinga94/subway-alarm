@@ -16,6 +16,7 @@ let Depart_Sec = NSNotification.Name("TaskDone3")
 let Arrive_Sec = NSNotification.Name("TaskDone4")
 
 let dateFormatter = DateFormatter()
+var TRAIN_NO = " "
 
 //let date = "17:18:59"
 var time1: String = " "
@@ -86,7 +87,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         print(numLbl.text!) //
         getCodeByName_depart(line: numLbl.text!)
-        getCodeByName_arrive(line: numLbl.text!)
+        //getCodeByName_arrive(line: numLbl.text!) //역 코드를 찾는 함수 실행!!
+        
         
         NotificationCenter.default.addObserver(forName: Depart_Code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
@@ -101,7 +103,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if let userInfo = noti.userInfo {
                 arriveNum = userInfo["data"] as! String
                 
-                self.arriveSec(arriveNum: arriveNum) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
+                self.arriveSec(arriveNum: arriveNum, trainNum: TRAIN_NO) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
                 
             }
         }
@@ -121,7 +123,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let resultDate2 = dateFormatter.date(from: time2)
             
             
-            let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!)
+            let diffsec: Double = resultDate2!.timeIntervalSince(resultDate1!)
             print("시간 차이는?? : \(abs(diffsec)) 초")
             self.seconds = abs(Int(diffsec))
             self.runTimer()//에러가 발생한다ㄸㄸㄸㄸㄸㄸㄸㄸㄸㄸ
@@ -135,7 +137,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: abs(diffsec), repeats: false)
             
-            let request = UNNotificationRequest(identifier: "timerdone", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: "timerdone", content: content, trigger: trigger) //notification ID 는 "timerdone"
             
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil )
         }
@@ -144,6 +146,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.present(alertController, animated: true) {
             // ...
         }
+        
+        
+        
         
         
     }
@@ -156,6 +161,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         isTimerRunning = false
         startButton.isEnabled = true
         //pauseButton.isEnabled = false
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
     }
     @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
         
@@ -350,10 +357,16 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
+<<<<<<< HEAD:subway-alarm-master/DRAFT for SubwayAlarm/IOS/Alarm/frontViewController.swift
         
         
             UNUserNotificationCenter.current().delegate = self
         
+=======
+
+            UNUserNotificationCenter.current().delegate = self //foreground에서 푸시알림이 뜰수 있게 하는 함수
+
+>>>>>>> origin/master:DRAFT for SubwayAlarm/DRAFT for SubwayAlarm/IOS/Alarm/frontViewController.swift
         
             let one = UIImage(named: "1.png" )
             image1.image = one
@@ -386,6 +399,12 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         NotificationCenter.default.addObserver(forName: Depart_Sec, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 출발역 떠나는 시간: \(userInfo["data"] as! String)")
+              
+                print(userInfo["data2"] as! String) //train_num을 받아온다
+                print(userInfo["data"] as! String) //left_time을 받아온다
+                
+                TRAIN_NO = userInfo["data2"] as! String
+                self.getCodeByName_arrive(line: self.numLbl.text!)
                 time1 = userInfo["data"] as! String
             }
         }
@@ -729,7 +748,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func departSec(departNum: String) {
         
-        let urlPath = "http://openapi.seoul.go.kr:8088/4f6142724a62617a38346769687741/json/SearchSTNTimeTableByFRCodeService/1/100/\(departNum)/1/1/"
+        let urlPath = "http://openapi.seoul.go.kr:8088/4f6142724a62617a38346769687741/json/SearchSTNTimeTableByFRCodeService/1/200/\(departNum)/1/1/"
         let url = NSURL(string: urlPath)
         
         
@@ -754,21 +773,21 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var station_num : Array<String> = Array<String>()
                 var arrive_time : Array<String> = Array<String>()
                 var left_time : Array<String> = Array<String>()
+                var train_num : Array<String> = Array<String>()
                 
-                
-                var startIndex : String.Index = arriveNum.startIndex
+                //var startIndex : String.Index = arriveNum.startIndex
                 
                 // 첫번째 글자에 대한 Index
-                let char_first = arriveNum[startIndex]
-                let trainNum = String(char_first) + "020"  //다른 호선에서 없는 경우도 있다.. 나중에 수정하자
+                //let char_first = arriveNum[startIndex]
+                //let trainNum = String(char_first) + "020"  //다른 호선에서 없는 경우도 있다.. 나중에 수정하자
                 
                 
-                
-                for num in 0...result_row_station!.count - 1 {  //15개 정도만 가져오면 찾을 수 있겠지???
+                let num = 10  //열번째 배열을 기준으로 잡자
+                //for num in 0...result_row_station!.count - 1 {  //15개 정도만 가져오면 찾을 수 있겠지???
                     
-                    var test_row_station_array = result_row_station?[num] as? [String: String]
+                    //var test_row_station_array = result_row_station?[num] as? [String: String]
                     
-                    if test_row_station_array?["TRAIN_NO"] == trainNum {
+                    //if test_row_station_array?["TRAIN_NO"] == trainNum {
                         
                         var result_row_station_array = result_row_station?[num] as? [String: String]
                         
@@ -783,17 +802,17 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                         let result_row_station_left = result_row_station_array?["LEFTTIME"]
                         left_time.append(result_row_station_left!)
-                        
-                    }
+                
+                        let result_row_train_num = result_row_station_array?["TRAIN_NO"]
+                        train_num.append(result_row_train_num!)
+                                            //}
                     
-                }
+                //}
                 
                 
+                let myDict = [ "data": left_time[0], "data2":train_num[0]] //dictionary 형태로 여러개의 데이터를 보낼수도 있다!!
                 
-                NotificationCenter.default.post(name: Depart_Sec, object: nil, userInfo:["data":left_time[0]])
-                
-                
-                
+                NotificationCenter.default.post(name: Depart_Sec, object: nil, userInfo:myDict) //data2에 TRAIN_NO 정보가 들어간다.
                 
                 
             } catch {
@@ -809,9 +828,9 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    func arriveSec(arriveNum: String) {  //train number 가져와서 계산
+    func arriveSec(arriveNum: String, trainNum: String) {  //train number 가져와서 계산
         
-        let urlPath = "http://openapi.seoul.go.kr:8088/4f6142724a62617a38346769687741/json/SearchSTNTimeTableByFRCodeService/1/100/\(arriveNum)/1/1/"
+        let urlPath = "http://openapi.seoul.go.kr:8088/4f6142724a62617a38346769687741/json/SearchSTNTimeTableByFRCodeService/1/200/\(arriveNum)/1/1/"
         let url = NSURL(string: urlPath)
         
         
@@ -834,11 +853,11 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var left_time : Array<String> = Array<String>()
                 
                 
-                var startIndex : String.Index = arriveNum.startIndex
+                //var startIndex : String.Index = arriveNum.startIndex
                 
                 // 첫번째 글자에 대한 Index
-                let char_first = arriveNum[startIndex]
-                let trainNum = String(char_first) + "020"
+                //let char_first = arriveNum[startIndex]
+                //let trainNum = String(char_first) + "020"
                 
                 
                 
@@ -868,8 +887,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 //let num = 10
                 
-                NotificationCenter.default.post(name: Arrive_Sec, object: nil, userInfo:["data":arrive_time[0]])
-                
+                NotificationCenter.default.post(name: Arrive_Sec, object: nil, userInfo:["data":left_time[0]])
+                //원래는 arrive_time[0]으로 해야 정확하지만.... 상행 하행 고려를 해줘야 한다!!
                 
                 
                 

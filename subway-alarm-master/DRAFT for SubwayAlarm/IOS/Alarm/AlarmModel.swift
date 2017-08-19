@@ -22,7 +22,11 @@ struct Alarm: PropertyReflectable {
     var onSnooze: Bool = false
     var depart = ""
     var arrive = ""
+<<<<<<< HEAD:subway-alarm-master/DRAFT for SubwayAlarm/IOS/Alarm/AlarmModel.swift
     var line: String = ""
+=======
+    var line = ""
+>>>>>>> origin/master:DRAFT for SubwayAlarm/DRAFT for SubwayAlarm/IOS/Alarm/AlarmModel.swift
     
     
     init(){}
@@ -62,7 +66,11 @@ extension Alarm {
         return "\(depart) -> \(arrive)!"
     }
     var formattedLine: String {
+<<<<<<< HEAD:subway-alarm-master/DRAFT for SubwayAlarm/IOS/Alarm/AlarmModel.swift
         return "\(line)"
+=======
+        return "\(line)!"
+>>>>>>> origin/master:DRAFT for SubwayAlarm/DRAFT for SubwayAlarm/IOS/Alarm/AlarmModel.swift
     }
 }
 
