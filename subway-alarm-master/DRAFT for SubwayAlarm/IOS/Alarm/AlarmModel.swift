@@ -60,7 +60,7 @@ struct Alarm: PropertyReflectable {
 
 extension Alarm {
     var formattedTime: String {
-        return "\(depart) -> \(arrive)!"
+        return "\(depart) -> \(arrive)"
     }
     var formattedLine: String {
 

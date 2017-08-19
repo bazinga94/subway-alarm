@@ -16,35 +16,23 @@ let Start_sec = NSNotification.Name("TaskDone3")
 let End_sec = NSNotification.Name("TaskDone4")
 
 let dateFormatter = DateFormatter()
-var TRAIN_NO = " "
 
-//let date = "17:18:59"
-var time1: String = " "
-var time2: String = " "
-
-var departNum: String = "디폴트"
-var arriveNum: String = "디폴트2"  // 시간을 계산하기 위해 받아와야하는 역 이름 변수들 + 디폴트 값을 안 만들었더니 에러가 생겨서...
 
 class frontViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, AVAudioPlayerDelegate{
     
     var audioPlayer: AVAudioPlayer? //알람때문에
-
     var mediaLabel: String!
     var mediaID: String!
     
 
     @IBOutlet weak var image1: UIImageView!  //호선 사진 보여주는 label
 
-    
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
    
-
-    
     @IBOutlet weak var subwayPicker: UIPickerView!
     @IBOutlet weak var subwaytableView: UITableView!
-    
     
     @IBOutlet weak var numLbl: UILabel!
     @IBOutlet weak var startLbl: UILabel!
@@ -79,6 +67,16 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         ["암사", "천호", "강동구청", "몽촌토성", "잠실", "석촌", "송파", "가락시장"],
         ["개화", "김포공항", "공항시장", "신방화", "양천향", "가양", "중미"]
     ]
+    
+    
+    var TRAIN_NO = " "
+    
+    //let date = "17:18:59"
+    var time1: String = " "
+    var time2: String = " "
+    
+    var departNum: String = "디폴트"
+    var arriveNum: String = "디폴트2"  // 시간을 계산하기 위해 받아와야하는 역 이름 변수들 + 디폴트 값을 안 만들었더니 에러가 생겨서...
    
     @IBAction func startButtonTapped(_ sender: AnyObject) {  //start버튼을 누를때 실행 함수
         if isTimerRunning == false {
@@ -93,23 +91,23 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         NotificationCenter.default.addObserver(forName: Start_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
-                departNum = userInfo["data"] as! String
+                self.departNum = userInfo["data"] as! String
                 
-                self.departSec(departNum: departNum) // 만약 noti가 departNum을 받으면 departSec함수에 집어넣어서 실행 시킨다
+                self.departSec(departNum: self.departNum) // 만약 noti가 departNum을 받으면 departSec함수에 집어넣어서 실행 시킨다
                 
             }
         }
         
         NotificationCenter.default.addObserver(forName: End_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
-                arriveNum = userInfo["data"] as! String
+                self.arriveNum = userInfo["data"] as! String
                 
-                self.arriveSec(arriveNum: arriveNum, trainNum: TRAIN_NO) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
+                self.arriveSec(arriveNum: self.arriveNum, trainNum: self.TRAIN_NO) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
                 
             }
         }
         //---------------------------------alert 생성 함수------------------------
-        let alertController = UIAlertController(title: "출발: \(startLbl.text) 도착: \(endLbl.text)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "출발: \(startLbl.text!) 도착: \(endLbl.text!)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
             
@@ -122,8 +120,8 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             
             dateFormatter.dateFormat = "HH:mm:ss"
-            let resultDate1 = dateFormatter.date(from: time1)
-            let resultDate2 = dateFormatter.date(from: time2)
+            let resultDate1 = dateFormatter.date(from: self.time1)
+            let resultDate2 = dateFormatter.date(from: self.time2)
             
             
             let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!) - 60 // 60초를 빼주는 이유는 여유있게 알람이 울리도록 하기위해
@@ -180,7 +178,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
         
         
-        self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 알람을 멈춤....
+        self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 소리 알람을 멈춤....
         
     }
 //    @IBAction func snoozeSwitchTapped (_ sender: UISwitch) {
@@ -490,15 +488,15 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
               
                 print("TRAIN_NO : ",userInfo["data2"] as! String) //train_num을 받아온다
                 
-                TRAIN_NO = userInfo["data2"] as! String
+                self.TRAIN_NO = userInfo["data2"] as! String
                 self.getCodeByName_arrive(line: self.numLbl.text!)
-                time1 = userInfo["data"] as! String
+                self.time1 = userInfo["data"] as! String
             }
         }
         NotificationCenter.default.addObserver(forName: End_sec, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 도착역 도착 시간: \(userInfo["data"] as! String)")
-                time2 = userInfo["data"] as! String
+                self.time2 = userInfo["data"] as! String
             }
         }
     }

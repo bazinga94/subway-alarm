@@ -115,14 +115,25 @@ class MainAlarmViewController: UITableViewController{
        
         //셀에 이미지 뷰 넣기
         let imageView = UIImageView(frame: CGRect())
-        imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
-
+        imageView.transform = CGAffineTransform(scaleX: 1, y: 1)   //원래 코드!!!
+        
+        //let screenSize: CGRect = UIScreen.main.bounds
+        //let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 10, height: 5))
+        //imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        
+     
+        //imageView.frame = CGRect(x: 0, y: 0, width: 10, height: screenSize.height * 0.2)
+        //let imageView = UIImageView(frame: CGRect(100, 150, 150, 150)); // set as you want
+        //var image = UIImage(named: "myImage.png");
+        //imageView.image = image;
+        
+        
+        
         // 알람모델의 라인 imgnum에 받아오기
         let imgnum: String = alarm.formattedLine
         
-        print(imgnum)
         //셀에 이미지 추가
-       cell!.imageView?.image = UIImage(named: "\(imgnum).png")
+        cell!.imageView?.image = UIImage(named: "\(imgnum).png")
 
 
         //셀에 string 넣기

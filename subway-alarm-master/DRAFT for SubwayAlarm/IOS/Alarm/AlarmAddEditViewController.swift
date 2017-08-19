@@ -10,10 +10,10 @@ import UIKit
 import Foundation
 import MediaPlayer
 
-let Depart_code = NSNotification.Name("TaskDone")
-let Arrive_code = NSNotification.Name("TaskDone2")
-let Depart_sec = NSNotification.Name("TaskDone3")
-let Arrive_sec = NSNotification.Name("TaskDone4")
+let Depart_code = NSNotification.Name("Task")
+let Arrive_code = NSNotification.Name("Task2")
+let Depart_sec = NSNotification.Name("Task3")
+let Arrive_sec = NSNotification.Name("Task4")
 
 class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,
     UIPickerViewDelegate,
@@ -47,6 +47,14 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
         ["개화", "김포공항", "공항시장", "신방화", "양천향", "가양", "중미"]
     ]
     
+    var TRAIN_NO = " "
+    
+    //let date = "17:18:59"
+    var time1: String = " "
+    var time2: String = " "
+    
+    var departNum: String = "디폴트"
+    var arriveNum: String = "디폴트2"  // 시간을 계산하기 위해 받아와야하는 역 이름 변수들 + 디폴트 값을 안 만들었더니 에러가 생겨서...
     
     
     
@@ -270,15 +278,15 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
                 
                 print("TRAIN_NO : ",userInfo["data2"] as! String) //train_num을 받아온다
                 
-                TRAIN_NO = userInfo["data2"] as! String
+                self.TRAIN_NO = userInfo["data2"] as! String
                 self.getCodeByName_arrive(line: self.lineLbl.text!)
-                time1 = userInfo["data"] as! String
+                self.time1 = userInfo["data"] as! String
             }
         }
         NotificationCenter.default.addObserver(forName: Arrive_sec, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
                 print("noti가 알려주는 도착역 도착 시간: \(userInfo["data"] as! String)")
-                time2 = userInfo["data"] as! String
+                self.time2 = userInfo["data"] as! String
             }
         }
     }
@@ -322,18 +330,18 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
         
         NotificationCenter.default.addObserver(forName: Depart_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
-                departNum = userInfo["data"] as! String
+                self.departNum = userInfo["data"] as! String
                 
-                self.departSec(departNum: departNum) // 만약 noti가 departNum을 받으면 departSec함수에 집어넣어서 실행 시킨다
+                self.departSec(departNum: self.departNum) // 만약 noti가 departNum을 받으면 departSec함수에 집어넣어서 실행 시킨다
                 
             }
         }
         
         NotificationCenter.default.addObserver(forName: Arrive_code, object: nil, queue: nil) { (noti: Notification) in
             if let userInfo = noti.userInfo {
-                arriveNum = userInfo["data"] as! String
+                self.arriveNum = userInfo["data"] as! String
                 
-                self.arriveSec(arriveNum: arriveNum, trainNum: TRAIN_NO) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
+                self.arriveSec(arriveNum: self.arriveNum, trainNum: self.TRAIN_NO) // 만약 noti가 departNum을 받으면 arriveSec함수에 집어넣어서 실행 시킨다
                 
             }
         }
