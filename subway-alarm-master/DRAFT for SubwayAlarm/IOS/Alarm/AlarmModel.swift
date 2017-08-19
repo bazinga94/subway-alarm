@@ -23,6 +23,7 @@ struct Alarm: PropertyReflectable {
     var depart = ""
     var arrive = ""
     var line = ""
+
     
     
     init(){}
@@ -62,7 +63,9 @@ extension Alarm {
         return "\(depart) -> \(arrive)!"
     }
     var formattedLine: String {
-        return "\(line)!"
+
+        return "\(line)"
+
     }
 }
 

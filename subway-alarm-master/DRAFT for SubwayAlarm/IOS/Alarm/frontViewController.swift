@@ -410,6 +410,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             print(didAllow) //푸시알림을 허용할지 물어보는 함수
         })
 
+
             UNUserNotificationCenter.current().delegate = self //foreground에서 푸시알림이 뜰수 있게 하는 함수
 
         
