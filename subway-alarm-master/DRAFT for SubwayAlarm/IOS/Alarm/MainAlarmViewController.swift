@@ -95,8 +95,8 @@ class MainAlarmViewController: UITableViewController{
         let alarm: Alarm = alarmModel.alarms[indexPath.row]
         let amAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 20.0)]
         let str = NSMutableAttributedString(string: alarm.formattedTime, attributes: amAttr)
-        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 15.0)]
-        str.addAttributes(timeAttr, range: NSMakeRange(0, str.length-2))
+        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 25.0)]
+        str.addAttributes(timeAttr, range: NSMakeRange(0, str.length))
         
         
 //        favoriteArray.append(str)
@@ -105,8 +105,33 @@ class MainAlarmViewController: UITableViewController{
 //        let station_name = favoriteArray[indexPath.row]
 //        cell!.textLabel?.attributedText = station_name
         
+        
+     
+       
+//        let imgnum = NSMutableAttributedString(string: alarm.formattedLine)
+//      
+    
+//        var favoriteArray : Array<NSMutableAttributedString> = Array<NSMutableAttributedString>()
+//                favoriteArray.append(imgnum)
+//               print(favoriteArray)
+       
+        //셀에 이미지 뷰 넣기
+        let imageView = UIImageView(frame: CGRect())
+        imageView.transform = CGAffineTransform(scaleX: 10, y: 10)
+        
+        // 알람모델의 라인 imgnum에 받아오기
+        var imgnum:String = alarm.formattedLine
+        
+        //셀에 이미지 추가
+        cell!.imageView?.image = UIImage(named: "\(imgnum).png")
+
+        //셀에 string 넣기
         cell!.textLabel?.attributedText = str
         cell!.detailTextLabel?.text = alarm.label
+        
+        
+        
+        
         //append switch button
         let sw = UISwitch(frame: CGRect())
         sw.transform = CGAffineTransform(scaleX: 0.9, y: 0.9);
