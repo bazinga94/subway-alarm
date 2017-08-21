@@ -18,27 +18,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
     var audioPlayer: AVAudioPlayer?
     let alarmScheduler: AlarmSchedulerDelegate = Scheduler()
     var alarmModel: Alarms = Alarms()
-
-//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-//        print(NSHomeDirectory())
-//        var error: NSError?
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-//        } catch let error1 as NSError{
-//            error = error1
-//            print("could not set session. err:\(error!.localizedDescription)")
-//        }
-//        do {
-//            try AVAudioSession.sharedInstance().setActive(true)
-//        } catch let error1 as NSError{
-//            error = error1
-//            print("could not active session. err:\(error!.localizedDescription)")
-//        }
-//        window?.tintColor = UIColor.red
-//        
-//        return true
-//    }
-//   
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        print(NSHomeDirectory())
+        var error: NSError?
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        } catch let error1 as NSError{
+            error = error1
+            print("could not set session. err:\(error!.localizedDescription)")
+        }
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let error1 as NSError{
+            error = error1
+            print("could not active session. err:\(error!.localizedDescription)")
+        }
+        window?.tintColor = UIColor.orange
+        
+        
+        return true
+    }
+//
 //    //receive local notification when app in foreground
 //    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
 //        
