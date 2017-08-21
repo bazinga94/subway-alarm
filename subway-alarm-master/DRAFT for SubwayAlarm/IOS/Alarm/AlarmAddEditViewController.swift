@@ -463,13 +463,13 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate, UITable
         if segue.identifier == Id.saveSegueIdentifier {
             let dist = segue.destination as! MainAlarmViewController
             let cells = dist.tableView.visibleCells
-            for cell in cells {
-                let sw = cell.accessoryView as! UISwitch
-                if sw.tag > segueInfo.curCellIndex
-                {
-                    sw.tag -= 1
-                }
-            }
+//            for cell in cells {
+//                let sw = cell.accessoryView as! UISwitch
+//                if sw.tag > segueInfo.curCellIndex
+//                {
+//                    sw.tag -= 1
+//                }
+//            }
             alarmScheduler.reSchedule()
         }
         else if segue.identifier == Id.soundSegueIdentifier {

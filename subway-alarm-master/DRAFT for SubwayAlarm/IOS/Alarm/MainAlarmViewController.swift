@@ -7,29 +7,17 @@
 //
 
 import UIKit
+import MediaPlayer
+import UserNotifications // 로컬 푸시 권한 요청
 
-class MainAlarmViewController: UITableViewController{
+class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
    
     var alarmDelegate: AlarmApplicationDelegate = AppDelegate()
     var alarmScheduler: AlarmSchedulerDelegate = Scheduler()
     var alarmModel: Alarms = Alarms()
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    var audioPlayer: AVAudioPlayer? //알람때문에
+    var soundTimer: Timer = Timer() //소리 알람을 위해
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,9 +81,9 @@ class MainAlarmViewController: UITableViewController{
         cell!.selectionStyle = .none
         cell!.tag = indexPath.row
         let alarm: Alarm = alarmModel.alarms[indexPath.row]
-        let amAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 20.0)]
+        let amAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 15.0)]
         let str = NSMutableAttributedString(string: alarm.formattedTime, attributes: amAttr)
-        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 25.0)]
+        let timeAttr: [String : Any] = [NSFontAttributeName : UIFont.systemFont(ofSize: 15.0)]
         str.addAttributes(timeAttr, range: NSMakeRange(0, str.length))
         
         
@@ -140,61 +128,181 @@ class MainAlarmViewController: UITableViewController{
         cell!.textLabel?.attributedText = str
         cell!.detailTextLabel?.text = ""
         
+        //셀에 button 넣기
+        let start_button = UIButton(type: UIButtonType.system)
+        start_button.frame = CGRect(x: 240, y: 35, width: 60, height: 20)
+        //button.backgroundColor = UIColor.green
+        start_button.setTitle("Start", for: UIControlState.normal)
+        start_button.addTarget(self, action:#selector(start_buttonTouched(sender:)), for: .touchUpInside)
+            
+        cell?.addSubview(start_button)
         
+        let reset_button = UIButton(type: UIButtonType.system)
+        reset_button.frame = CGRect(x: 300, y: 35, width: 60, height: 20)
+        //button.backgroundColor = UIColor.green
+        reset_button.setTitle("Reset", for: UIControlState.normal)
+        reset_button.addTarget(self, action:#selector(reset_buttonTouched(sender:)), for: .touchUpInside)
         
-        
-        //append switch button
-        let sw = UISwitch(frame: CGRect())
-        sw.transform = CGAffineTransform(scaleX: 0.9, y: 0.9);
-        
-        //tag is used to indicate which row had been touched
-        sw.tag = indexPath.row
-        sw.addTarget(self, action: #selector(MainAlarmViewController.switchTapped(_:)), for: UIControlEvents.valueChanged)
-        if alarm.enabled {
-            cell!.backgroundColor = UIColor.white
-            cell!.textLabel?.alpha = 1.0
-            cell!.detailTextLabel?.alpha = 1.0
-            sw.setOn(true, animated: false)
-        } else {
-            cell!.backgroundColor = UIColor.groupTableViewBackground
-            cell!.textLabel?.alpha = 0.5
-            cell!.detailTextLabel?.alpha = 0.5
-        }
-        cell!.accessoryView = sw
+        cell?.addSubview(reset_button)
+
+//        //append switch button
+//        let sw = UISwitch(frame: CGRect())
+//        sw.transform = CGAffineTransform(scaleX: 0.9, y: 0.9);
+//        
+//        //tag is used to indicate which row had been touched
+//        sw.tag = indexPath.row
+//        sw.addTarget(self, action: #selector(MainAlarmViewController.switchTapped(_:)), for: UIControlEvents.valueChanged)
+//        if alarm.enabled {
+//            cell!.backgroundColor = UIColor.white
+//            cell!.textLabel?.alpha = 1.0
+//            cell!.detailTextLabel?.alpha = 1.0
+//            sw.setOn(true, animated: false)
+//        } else {
+//            cell!.backgroundColor = UIColor.groupTableViewBackground
+//            cell!.textLabel?.alpha = 0.5
+//            cell!.detailTextLabel?.alpha = 0.5
+//        }
+//        cell!.accessoryView = sw
         
         //delete empty seperator line
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         return cell!
     }
     
-    @IBAction func switchTapped(_ sender: UISwitch) {
-        let index = sender.tag
-        alarmModel.alarms[index].enabled = sender.isOn
-        if sender.isOn {
-            print("switch on")
-            alarmScheduler.setNotificationWithDate(alarmModel.alarms[index].date, onWeekdaysForNotify: alarmModel.alarms[index].repeatWeekdays, snoozeEnabled: alarmModel.alarms[index].snoozeEnabled, onSnooze: false, soundName: alarmModel.alarms[index].mediaLabel, index: index)
-            tableView.reloadData()
-        }
-        else {
-            print("switch off")
-            alarmScheduler.reSchedule()
-            tableView.reloadData()
-        }
-    }
+    func start_buttonTouched(sender:UIButton!)  //button 클릭시 실행 함수
+        {
+          print("Start Button Target Action Works!!!")
+            let alertController = UIAlertController(title: "출발: 안암 \n도착: 고려대", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
+            //---------------------------------alert 생성 함수------------------------
+                
+            }
+            alertController.addAction(cancelAction)
+            
+            let destroyAction = UIAlertAction(title: "Start", style: .destructive) { action in
+                //Start 버튼을 눌렀을때 실행 하는 시간 계산 함수
+                
+                
+                dateFormatter.dateFormat = "HH:mm:ss"
+                //let resultDate1 = dateFormatter.date(from: self.time1)
+                //let resultDate2 = dateFormatter.date(from: self.time2)
+                
+                
+                let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!) - 60 // 60초를 빼주는 이유는 여유있게 알람이 울리도록 하기위해
+                print("시간 차이는?? : \(abs(diffsec)) 초")
+                //self.seconds = abs(Int(diffsec))
+                //self.runTimer()//에러가 발생한다????
+                self.soundTimer = Timer.scheduledTimer(withTimeInterval: abs(diffsec),
+                                                       repeats: false) {
+                                                        timer in
+                                                        let bell: String = "bell"
+                                                        self.playSound(bell) //알람을 울리게 하는 함수 "bell.mp3"
+                                                        //Put the code that be called by the timer here.
+                                                        print("알람 발생!")
+                }
+                
+                //--------------------------------푸시알림 함수----------------------------------------
+                let content = UNMutableNotificationContent()
+                content.title = "출발역 : 안암" //"This is title"
+                content.subtitle = "도착역 : 고려대" //"This is Subtitle"
+                content.body = "\(abs(diffsec))초 걸림.... 빨리 내려!!!!!!!!!"
+                content.badge = 1  //앱 아이콘에 알림 표시 추가 함
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: abs(diffsec), repeats: false)
+                
+                let request = UNNotificationRequest(identifier: "timerdone", content: content, trigger: trigger) //notification ID 는 "timerdone"
+                
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: nil )
+            }
+            alertController.addAction(destroyAction)
+            
+            self.present(alertController, animated: true) {
+                // ...
+            }
 
+            
+//        for k in 0...alarmModel.alarms.count - 1 {
+//        var alarm: Alarm = alarmModel.alarms[k]  //원래는 0 대신indexPath.row 임
+//
+//        var time = alarm.formattedDepart
+//
+//        print("time잘 받는지??\(time)")
+//        }
+        
+      }
+    
+    func reset_buttonTouched(sender:UIButton!) {
+        
+        soundTimer.invalidate()  //소리 나는 알람 취소/정지 해주는 함수
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
+        self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 소리 알람을 멈춤....
+    }
+    
+    
+//    @IBAction func switchTapped(_ sender: UISwitch) {
+//        let index = sender.tag
+//        alarmModel.alarms[index].enabled = sender.isOn
+//        if sender.isOn {
+//            print("switch on")
+//            alarmScheduler.setNotificationWithDate(alarmModel.alarms[index].date, onWeekdaysForNotify: alarmModel.alarms[index].repeatWeekdays, snoozeEnabled: alarmModel.alarms[index].snoozeEnabled, onSnooze: false, soundName: alarmModel.alarms[index].mediaLabel, index: index)
+//            tableView.reloadData()
+//        }
+//        else {
+//            print("switch off")
+//            alarmScheduler.reSchedule()
+//            tableView.reloadData()
+//        }
+//    }
+    
+    func playSound(_ soundName: String) {
+        
+        //vibrate phone first
+        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+        //set vibrate callback
+        AudioServicesAddSystemSoundCompletion(SystemSoundID(kSystemSoundID_Vibrate),nil,
+                                              nil,
+                                              { (_:SystemSoundID, _:UnsafeMutableRawPointer?) -> Void in
+                                                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+        },
+                                              nil)
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: soundName, ofType: "mp3")!)
+        
+        var error: NSError?
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+        } catch let error1 as NSError {
+            error = error1
+            audioPlayer = nil
+        }
+        
+        if let err = error {
+            print("audioPlayer error \(err.localizedDescription)")
+            return
+        } else {
+            audioPlayer!.delegate = self
+            audioPlayer!.prepareToPlay()
+        }
+        
+        //negative number means loop infinity
+        audioPlayer!.numberOfLoops = -1  //audioPlayer!.stop() 명령 전까지 계속 울림...
+        audioPlayer!.play()
+    }
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let index = indexPath.row
             alarmModel.alarms.remove(at: index)
-            let cells = tableView.visibleCells
-            for cell in cells {
-                let sw = cell.accessoryView as! UISwitch
-                //adjust saved index when row deleted
-                if sw.tag > index {
-                    sw.tag -= 1
-                }
-            }
+//            let cells = tableView.visibleCells
+//            for cell in cells {
+//                let sw = cell.accessoryView as! UISwitch
+//                //adjust saved index when row deleted
+//                if sw.tag > index {
+//                    sw.tag -= 1
+//                }
+//            }
             if alarmModel.count == 0 {
                 self.navigationItem.leftBarButtonItem = nil
             }
@@ -233,17 +341,17 @@ class MainAlarmViewController: UITableViewController{
             alarmModel.alarms[index].enabled = false
         }
         let cells = tableView.visibleCells
-        for cell in cells {
-            if cell.tag == index {
-                let sw = cell.accessoryView as! UISwitch
-                if alarmModel.alarms[index].repeatWeekdays.isEmpty {
-                    sw.setOn(false, animated: false)
-                    cell.backgroundColor = UIColor.groupTableViewBackground
-                    cell.textLabel?.alpha = 0.5
-                    cell.detailTextLabel?.alpha = 0.5
-                }
-            }
-        }
+//        for cell in cells {
+//            if cell.tag == index {
+//                let sw = cell.accessoryView as! UISwitch
+//                if alarmModel.alarms[index].repeatWeekdays.isEmpty {
+//                    sw.setOn(false, animated: false)
+//                    cell.backgroundColor = UIColor.groupTableViewBackground
+//                    cell.textLabel?.alpha = 0.5
+//                    cell.detailTextLabel?.alpha = 0.5
+//                }
+//            }
+//        }
     }
 
 }

@@ -107,7 +107,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         //---------------------------------alert 생성 함수------------------------
-        let alertController = UIAlertController(title: "출발: \(startLbl.text!) 도착: \(endLbl.text!)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "출발: \(startLbl.text!) \n도착: \(endLbl.text!)", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
             
