@@ -131,7 +131,7 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
         //셀에 button 넣기
         let start_button = UIButton(type: UIButtonType.system)
         start_button.frame = CGRect(x: 240, y: 35, width: 60, height: 20)
-        //button.backgroundColor = UIColor.green
+        //start_button.backgroundColor = UIColor.blue
         start_button.setTitle("Start", for: UIControlState.normal)
         start_button.addTarget(self, action:#selector(start_buttonTouched(sender:)), for: .touchUpInside)
             
@@ -172,11 +172,11 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
     func start_buttonTouched(sender:UIButton!)  //button 클릭시 실행 함수
         {
           print("Start Button Target Action Works!!!")
+            //---------------------------------alert 생성 함수------------------------
             let alertController = UIAlertController(title: "출발: 안암 \n도착: 고려대", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
-            //---------------------------------alert 생성 함수------------------------
-                
+                //Cancel 버튼을 눌렀을때 실행 함수
             }
             alertController.addAction(cancelAction)
             
@@ -234,9 +234,23 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
     
     func reset_buttonTouched(sender:UIButton!) {
         
+        print("Reset Button Target Action Works!!!")
         soundTimer.invalidate()  //소리 나는 알람 취소/정지 해주는 함수
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["timerdone"]) //push알림도 제거하는 함수!
-        self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 소리 알람을 멈춤....
+        if audioPlayer?.play() == true {
+            self.audioPlayer!.stop() //알람을 멈추는 함수 테스트용!! 나중에 지워야함 ~초뒤에 울릴 알람을 제거하는게 아니라 소리 알람을 멈춤....
+        } //소리알람이 실행 중일때만 멈추게함
+        
+        let alertController = UIAlertController(title: "출발: 안암 \n도착: 고려대", message: "알람이 종료되었습니다", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "확인", style: .cancel) { action in
+            //Cancel 버튼을 눌렀을때 실행 함수
+        }
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true) {
+            // 이게 있어야 alert가 생긴다
+        }
+
     }
     
     
