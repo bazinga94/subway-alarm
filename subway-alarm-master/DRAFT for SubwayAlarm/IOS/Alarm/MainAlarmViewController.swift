@@ -19,6 +19,9 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
     var audioPlayer: AVAudioPlayer? //알람때문에
     var soundTimer: Timer = Timer() //소리 알람을 위해
     
+    var start_button = UIButton(type: UIButtonType.system) //전역에서 start_button을 컨트롤 하기위해
+    var reset_button = UIButton(type: UIButtonType.system)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         alarmScheduler.checkNotification()
@@ -129,20 +132,21 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
         cell!.detailTextLabel?.text = ""
         
         //셀에 button 넣기
-        let start_button = UIButton(type: UIButtonType.system)
+        start_button = UIButton(type: UIButtonType.system) //start_button을 다시 선언
         start_button.frame = CGRect(x: 240, y: 35, width: 60, height: 20)
-        //start_button.backgroundColor = UIColor.blue
+//        start_button.backgroundColor = UIColor.lightGray
+//        start_button.tintColor = UIColor.black
         start_button.setTitle("Start", for: UIControlState.normal)
         start_button.addTarget(self, action:#selector(start_buttonTouched(sender:)), for: .touchUpInside)
             
         cell?.addSubview(start_button)
         
-        let reset_button = UIButton(type: UIButtonType.system)
+        reset_button = UIButton(type: UIButtonType.system)
         reset_button.frame = CGRect(x: 300, y: 35, width: 60, height: 20)
         //button.backgroundColor = UIColor.green
         reset_button.setTitle("Reset", for: UIControlState.normal)
         reset_button.addTarget(self, action:#selector(reset_buttonTouched(sender:)), for: .touchUpInside)
-        
+        reset_button.isEnabled = false //reset_button 처음엔 비활성화
         cell?.addSubview(reset_button)
 
 //        //append switch button
@@ -173,6 +177,7 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
         {
           print("Start Button Target Action Works!!!")
             //---------------------------------alert 생성 함수------------------------
+            
             let alertController = UIAlertController(title: "출발: 안암 \n도착: 고려대", message: "알람을 켜시겠습니까?", preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in
@@ -183,6 +188,9 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
             let destroyAction = UIAlertAction(title: "Start", style: .destructive) { action in
                 //Start 버튼을 눌렀을때 실행 하는 시간 계산 함수
                 
+                sender.isEnabled = false //확인 누를시 자기 자신 Enabled함
+                //sender.setTitle("Reset", for: UIControlState.normal)
+                self.reset_button.isEnabled = true //reset 버튼은 활성화
                 
                 dateFormatter.dateFormat = "HH:mm:ss"
                 //let resultDate1 = dateFormatter.date(from: self.time1)
@@ -233,6 +241,9 @@ class MainAlarmViewController: UITableViewController, AVAudioPlayerDelegate{
       }
     
     func reset_buttonTouched(sender:UIButton!) {
+        
+        start_button.isEnabled = true //reset할시 start_button다시 활성화!!!
+        reset_button.isEnabled = false
         
         print("Reset Button Target Action Works!!!")
         soundTimer.invalidate()  //소리 나는 알람 취소/정지 해주는 함수

@@ -126,7 +126,7 @@ class frontViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let resultDate2 = dateFormatter.date(from: self.time2)
             
             
-            let diffsec: Double = 5//resultDate2!.timeIntervalSince(resultDate1!) - 60 // 60초를 빼주는 이유는 여유있게 알람이 울리도록 하기위해
+            let diffsec: Double = resultDate2!.timeIntervalSince(resultDate1!) - 60 // 60초를 빼주는 이유는 여유있게 알람이 울리도록 하기위해
             print("시간 차이는?? : \(abs(diffsec)) 초")
             self.seconds = abs(Int(diffsec))
             self.runTimer()//에러가 발생한다????

@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
             error = error1
             print("could not active session. err:\(error!.localizedDescription)")
         }
-        window?.tintColor = UIColor.orange
+        //window?.tintColor = UIColor.blue
         
         
         return true
